@@ -1,0 +1,27 @@
+*{
+    background-image: src("../media/logo.png");
+}
+body{
+    width:2000px;
+    height:2000px;
+    background-color: rgb(0, 255, 102);
+}
+.app{
+    width:2000px;
+    height:2000px;
+    
+}
+.show{
+    background-color: aqua;
+}
+.buttons{
+    background-color: black;
+    height: 789px;
+    width: 789px;
+}
+.dark-mode{
+    background-color: green;
+}
+.light-mode{
+    background-color: white;
+}
