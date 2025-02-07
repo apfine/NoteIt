@@ -1,5 +1,5 @@
 const express = require("express")
-const users = require("./MOCK_DATA.json")
+const users = require("./backend/data/MOCK_DATA.json")
 const fs = require("fs")
 const { emitWarning } = require("process")
 const path = require("path")
@@ -12,21 +12,15 @@ const KEY = process.env.JWT_SECRET||"supersecret"
 
 const app = express()
 
-app.use(express.static(path.join(__dirname , "public")))
+app.use(express.static(path.join(__dirname , "public"))) //one common mistake is not using index.html and the system do not detects.
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
 //app.use(cookieParser())
 
 
-app.route('/api/users  ').get((req , res)=>{
-    console.log(req.headers)
-    res.cookies = {name:"ham"}
-    console.log("BASE-URL : ", req.baseUrl , " ,  " , res.cookies)
-    // const add = url("./app.html")
-    // const html = add.text();
-    // res.send(html)
-   // res.sendFile(path.join(pathDefault , "app.html"))
-    //res.sendFile("./public/app.html")
+app.route('/api/users').get((req , res)=>{
+    const html = add.text();
+    res.send(html)
     return res.json({current:`${__dirname}`})
 }).post((req , res)=>{
     const body = req.body
