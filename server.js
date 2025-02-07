@@ -50,5 +50,5 @@ app.route('/api/users/:id').get((req , res)=>{
 })
 
 app.listen(port , ()=>{
-    console.log(`The server is listening , PORT : ${port}`)
+    console.log(`The server is listening , PORT: ${port}`)
 })
