@@ -16,12 +16,15 @@ app.use(express.static(path.join(__dirname , "public")))
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
 //app.use(cookieParser())
-
-app.get("/",(req ,res)=>{
-    //res.redirect(301 ,"/app.html")
-    res.sendFile(path.join(__dirname , "public" , "app.html"))
-})
-app.route('/api/users').get((req , res)=>{
+app.get("/app.html", (req, res) => {
+    res.redirect("/");
+  });
+  
+// app.get("/",(req ,res)=>{
+//     //res.redirect(301 ,"/app.html")
+//     res.sendFile(path.join(__dirname , "public" , "app.html"))
+// })
+app.route('/api/users  ').get((req , res)=>{
     console.log(req.headers)
     res.cookies = {name:"ham"}
     console.log("BASE-URL : ", req.baseUrl , " ,  " , res.cookies)
