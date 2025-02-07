@@ -17,9 +17,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended : false}))
 //app.use(cookieParser())
 
-app.get("",(req ,res)=>{
+app.get("/",(req ,res)=>{
     //res.redirect(301 ,"/app.html")
- res.sendFile(path.join(__dirname , "public\\app.html"))
+    res.sendFile(path.join(__dirname , "public" , "app.html"))
 })
 app.route('/api/users').get((req , res)=>{
     console.log(req.headers)
