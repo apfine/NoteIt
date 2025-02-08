@@ -13,12 +13,13 @@ const KEY = process.env.JWT_SECRET||"supersecret"
 
 const app = express()
 
-// app.use(session({
-//     secret:"supersecretkey",
-//     resave:false,
-//     saveUninitialized:false,
-//     cookie:{httpOnly:true , secure: process.env.NODE_ENV==="development"}      //change to production
-// }))
+app.use(session({
+    secret:"supersecretkey",
+    resave:false,
+    saveUninitialized:false,
+    cookie:{httpOnly:true , secure: process.env.NODE_ENV==="development"}      //change to production
+}))
+
 app.use(express.static(path.join(__dirname , "public"))) //one common mistake is not using index.html and the system do not detects.
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
