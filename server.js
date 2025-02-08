@@ -1,4 +1,4 @@
-const session = require("express-session")
+
 const express = require("express")
 const users = require("./backend/data/MOCK_DATA.json")
 const fs = require("fs")
@@ -13,12 +13,12 @@ const KEY = process.env.JWT_SECRET||"supersecret"
 
 const app = express()
 
-app.use(session({
-    secret:"supersecretkey",
-    resave:false,
-    saveUninitialized:false,
-    cookie:{httpOnly:true , secure: proccess.env.NODE_ENV==="development"}      //change to production
-}))
+// app.use(session({
+//     secret:"supersecretkey",
+//     resave:false,
+//     saveUninitialized:false,
+//     cookie:{httpOnly:true , secure: process.env.NODE_ENV==="development"}      //change to production
+// }))
 app.use(express.static(path.join(__dirname , "public"))) //one common mistake is not using index.html and the system do not detects.
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
