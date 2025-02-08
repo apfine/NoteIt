@@ -1,4 +1,4 @@
-
+const redis = require("connect-redis").default
 const express = require("express")
 const users = require("./backend/data/MOCK_DATA.json")
 const fs = require("fs")
@@ -14,36 +14,17 @@ const KEY = process.env.JWT_SECRET||"supersecret"
 const app = express()
 
 app.use(session({
+    store : new redis({ client:redisClient }),
     secret:"supersecretkey",
     resave:false,
     saveUninitialized:false,
-    cookie:{httpOnly:true , secure: process.env.NODE_ENV==="development"}      //change to production
+    cookie:{httpOnly:true , secure: process.env.NODE_ENV==="development"}      //change to production or can also us secure:true
 }))
 
 app.use(express.static(path.join(__dirname , "public"))) //one common mistake is not using index.html and the system do not detects.
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
 app.use(cookieParser())
-
-app.route('/api/users').get((req , res)=>{
-    const html = add.text();
-    res.send(html)
-    return res.json({current:`${__dirname}`})
-}).post((req , res)=>{
-    const body = req.body
-    console.log("body" , body)
-    return res.json(body);
-})
-
-app.route('/api/users/:id').get((req , res)=>{
-    const id = Number(req.params.id)
-    const user = users.find((user)=>user.id===id)
-    return res.json(user)
-}).patch((req , res)=>{
-    const id = Number(req.params.id)
-    const user = users.find(user=>user.id===id)
-    res.json({status:"pending"})
-})
 
 app.get("/set-cookie" , (req , res)=>{
     if(req.cookies.mode==1){
