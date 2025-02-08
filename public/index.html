@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteIt</title>
+    <link rel = "icon" href="../media/logo.png" type="image/x-icon">
+    <link rel = "stylesheet" href="./app.css"  id = "sheet">
+    <script rel="script" type = "module" src = "./app.js" id="script"></script>
+</head>
+<body id = "app">
+    Work In Progress
+    <div class="show">
+    </div>
+    <button class="buttons">
+
+    </button >
+    <h2>SVG Note-Taking App (Touch & Mouse)</h2>
+    <svg id="drawingArea" width="100%" height="100%"></svg>
+    <br>
+    <button onclick="clearSVG()">Clear</button>
+    <button onclick="saveSVG()">Save as SVG</button>
+
+    <script>
+        const svg = document.getElementById("drawingArea");
+        let drawing = false;
+        let path;
+        let points = [];
+
+        // Convert touch/mouse events to SVG coordinates
+        function getSVGPoint(evt) {
+            let rect = svg.getBoundingClientRect();
+            let x = evt.clientX || evt.touches[0].clientX;
+            let y = evt.clientY || evt.touches[0].clientY;
+            return { x: x - rect.left, y: y - rect.top };
+        }
+
+        // Start drawing
+        function startDraw(evt) {
+            let { x, y } = getSVGPoint(evt);
+            drawing = true;
+            points = [`M${x},${y}`];
+            path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", points.join(" "));
+            path.setAttribute("stroke", "black");
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke-width", "2");
+            svg.appendChild(path);
+            evt.preventDefault();
+        }
+
+        // Draw lines
+        function draw(evt) {
+            if (!drawing) return;
+            let { x, y } = getSVGPoint(evt);
+            points.push(`L${x},${y}`);
+            path.setAttribute("d", points.join(" "));
+            evt.preventDefault();
+        }
+
+        // Stop drawing
+        function stopDraw() {
+            drawing = false;
+        }
+
+        // Clear SVG
+        function clearSVG() {
+            svg.innerHTML = "";
+        }
+
+        // Save SVG as file
+        function saveSVG() {
+            const serializer = new XMLSerializer();
+            const svgData = serializer.serializeToString(svg);
+            const blob = new Blob([svgData], { type: "image/svg+xml" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "drawing.svg";
+            link.click();
+        }
+
+        // Event listeners for both touch & mouse
+        svg.addEventListener("mousedown", startDraw);
+        svg.addEventListener("mousemove", draw);
+        svg.addEventListener("mouseup", stopDraw);
+        svg.addEventListener("mouseleave", stopDraw);
+
+        svg.addEventListener("touchstart", startDraw);
+        svg.addEventListener("touchmove", draw);
+        svg.addEventListener("touchend", stopDraw);
+    </script>
+</body>
+</html>
