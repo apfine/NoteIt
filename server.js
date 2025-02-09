@@ -43,7 +43,6 @@ app.post("/register" , async(req , res)=>{
         const{username , password} = req.body
 
         const exists = await user.findOne({username})
-
         if(exists){
             return res.status(400).json({message:"Username not availaible ."})
         }
