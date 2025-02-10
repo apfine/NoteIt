@@ -15,7 +15,7 @@ const { error } = require("console")
 const {mongo_user , mongo_pass}  = require("./backend/js/confidential.js")
 
 
-const port = 3002
+const port = 3000
 
 const app = express()
 
