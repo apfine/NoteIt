@@ -12,10 +12,10 @@ const cookieParser = require("cookie-parser")
 const mon = require("mongoose")
 const user = require("./models/database")
 const { error } = require("console")
-const {mongo_user , mongo_pass}  = require("./confidential.js")
+const {mongo_user , mongo_pass}  = require("./backend/js/confidential.js")
 
 
-const port = 3000
+const port = 3002
 
 const app = express()
 
@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended : false}))
 app.use(cookieParser())
 app.use(cors())
 
-const mongo = `mongodb+srv://${mongo_user}:${mongo_pass}}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const mongo = `mongodb+srv://${mongo_user}:${encodeURIComponent(mongo_pass)}}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mon.connect(mongo,{
     useNewUrlParser:true,
     useUnifiedTopology:true
