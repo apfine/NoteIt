@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended : false}))
 app.use(cookieParser())
 app.use(cors())
 
-const url = `mongodb+srv://helloAdmin:pm7XGa7gScJm4qB@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mongo.connect(url,{
     useNewUrlParser:true,
     useUnifiedTopology:true
