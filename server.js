@@ -30,7 +30,8 @@ app.use(cors())
 const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mongo.connect(url,{
     useNewUrlParser:true,
-    useUnifiedTopology:true
+    useUnifiedTopology:true,
+    tls:true
 })
 .then(()=>{
     console.log("Connected to mongoose DB")
