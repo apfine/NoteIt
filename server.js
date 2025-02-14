@@ -9,7 +9,7 @@ const session = require("express-session")
 require("dotenv").config()
 const jwt = require("jsonwebtoken")
 const cookieParser = require("cookie-parser")
-const mon = require("mongoose")
+const mongo = require("mongoose")
 const user = require("./models/database")
 const { error } = require("console")
 const {mongo_user , mongo_pass}  = require("./backend/js/confidential.js")
@@ -27,8 +27,8 @@ app.use(express.urlencoded({extended : false}))
 app.use(cookieParser())
 app.use(cors())
 
-const mongo = `mongodb+srv://${mongo_user}:${encodeURIComponent(mongo_pass)}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
-mon.connect(mongo,{
+const url = `mongodb+srv://helloAdmin:pm7XGa7gScJm4qB@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+mongo.connect(url,{
     useNewUrlParser:true,
     useUnifiedTopology:true
 })
