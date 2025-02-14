@@ -14,7 +14,6 @@ const user = require("./models/database")
 const { error } = require("console")
 const {mongo_user , mongo_pass}  = require("./backend/js/confidential.js")
 
-
 const port = 3000
 
 const app = express()
@@ -23,14 +22,12 @@ const app = express()
 //Middlewares
 app.use(express.static(path.join(__dirname , "public"))) //one common mistake is not using index.html and the system do not detects.
 app.use(express.json())
-app.use(express.urlencoded({extended : false}))
+app.use(express.urlencoded({extended : true}))
 app.use(cookieParser())
 app.use(cors())
 
 const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mongo.connect(url,{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
     tls:true
 })
 .then(()=>{
@@ -48,9 +45,9 @@ app.post("/register" , async(req , res)=>{
         if(exists){
             return res.status(400).json({message:"Username not availaible ."})
         }
-
-        const encoded = await bycrypt.hash(password , 10)
-
+        
+        const encoded = password //await bcrypt.hash(password , 10)
+        console.log("I reached here.")
         const newUser = new user({username , password:encoded})
         await newUser.save()
 
