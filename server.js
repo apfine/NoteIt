@@ -58,11 +58,11 @@ app.post("/register" ,upload.none(), async(req , res)=>{
         console.log("I reached here.")
         const newUser = new user({username , password:encoded})
         await newUser.save()
-
-        res.status(201).json({message : "User registered successfully . "})
+       
+        res.status(201).json({message : "User registered successfully ."})
     }
     catch(error){
-        res.status(500).json({error : error.message})
+        res.status(500).json({ error : error.message})
     }
 })
 
