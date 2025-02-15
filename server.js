@@ -39,14 +39,17 @@ const KEY = process.env.JWT_SECRET||"supersecret"
 //Registration route
 app.post("/register" , async(req , res)=>{
     try{
-        const{username , password} = req.body
+        const data = {...req.body , ...req.query}
+        console.log("Recieved the user data " , data)
+
+        const{username , password} = data
 
         const exists = await user.findOne({username})
         if(exists){
             return res.status(400).json({message:"Username not availaible ."})
         }
         
-        const encoded = password //await bcrypt.hash(password , 10)
+        const encoded = await bcrypt.hash(password , 10)
         console.log("I reached here.")
         const newUser = new user({username , password:encoded})
         await newUser.save()
@@ -81,17 +84,19 @@ app.post("/login" , async(req , res)=>{
         }
 
         const match = await bcrypt.compare(password , exists.password)
-
+        console.log("I was here.")
         if(!match){
             return res.status(400).json({message:"Invalid Credentials"})
         }
 
         //generate the jwt token
-        const token = jwt.sign({userId:exists.id}, JWT_SECRET , {expiresIn :"24h"})
-        res.json({message:"Login Successful"} , token)
+        console.log("I was here.1")
+        const token = jwt.sign({userId:exists._id}, JWT_SECRET , {expiresIn :"24h"})
+        console.log("I was here.2")
+        return res.json({message:"Login Successful"} , token)
     }
     catch(error){
-        return res.status(500).json({message:`We couldn't verify its you , try again :${ error.message()}`})
+        return res.status(500).json({message:`We couldn't verify its you , try again :${ error.message}`})
     }
 })
 
