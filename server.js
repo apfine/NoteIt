@@ -40,6 +40,7 @@ const KEY = process.env.JWT_SECRET||"supersecret"
 app.post("/register" , async(req , res)=>{
     try{
         const data = {...req.body , ...req.query}
+        
         console.log("Recieved the user data " , data)
 
         const{username , password} = data
