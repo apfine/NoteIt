@@ -13,11 +13,14 @@ const mongo = require("mongoose")
 const user = require("./models/database")
 const { error } = require("console")
 const {mongo_user , mongo_pass}  = require("./backend/js/confidential.js")
-
+const multer = require("multer")
+const compress = require("compression")
 const port = 3000
 
-const app = express()
+JWT_SECRET = "awijrfaer09q9t4j"
 
+const app = express()
+const upload =multer()
 
 //Middlewares
 app.use(express.static(path.join(__dirname , "public"))) //one common mistake is not using index.html and the system do not detects.
@@ -25,6 +28,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 app.use(cookieParser())
 app.use(cors())
+app.use(compress())
 
 const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mongo.connect(url,{
@@ -37,15 +41,15 @@ mongo.connect(url,{
 const KEY = process.env.JWT_SECRET||"supersecret"
 
 //Registration route
-app.post("/register" , async(req , res)=>{
+app.post("/register" ,upload.none(), async(req , res)=>{
     try{
         const data = {...req.body , ...req.query}
-        
+
         console.log("Recieved the user data " , data)
 
         const{username , password} = data
 
-        const exists = await user.findOne({username})
+        const exists = await user.findOne({username}).lean()
         if(exists){
             return res.status(400).json({message:"Username not availaible ."})
         }
@@ -74,13 +78,14 @@ app.get("/set-cookie" , (req , res)=>{
 })
 
 //login route
-app.post("/login" , async(req , res)=>{
+app.post("/login" ,upload.none(), async(req , res)=>{
     try{
-        const {username , password} = req.body
+        const data = {...req.body , ...req.query}
+        const {username , password} = data
 
-        const exists = await user.findOne({username})
+        const exists = await user.findOne({username}).lean()
 
-        if(!user){
+        if(!exists){
             return res.status(400).json({message:"Invalid Credentials."})
         }
 
