@@ -15,6 +15,7 @@ const { error } = require("console")
 const {mongo_user , mongo_pass , jwtsecret}  = require("./backend/js/confidential.js")
 const multer = require("multer")
 const compress = require("compression")
+const {svgRouter} = require("./routers/svgRouter.js")
 const port = 3000
 
 JWT_SECRET = jwtsecret
