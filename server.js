@@ -99,6 +99,13 @@ app.post("/login" ,upload.none(), async(req , res)=>{
         //generate the jwt token
        
         const token = jwt.sign({userId:exists._id}, JWT_SECRET , {expiresIn :"24h"})
+
+        res.cookie("token" , token , {
+            httpOnly:true,
+            secure:true,
+            sameSite:'Strict',
+            maxAge:3600000
+        })
         
         return res.status(200).json({message:"Login Successful"})
     }
