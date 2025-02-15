@@ -16,6 +16,7 @@ const {mongo_user , mongo_pass , jwtsecret}  = require("./backend/js/confidentia
 const multer = require("multer")
 const compress = require("compression")
 const {svgRouter} = require("./routers/svgRouter.js")
+const verifyToken = require("./backend/js/tokenVerify.js")
 const port = 3000
 
 JWT_SECRET = jwtsecret
@@ -28,8 +29,10 @@ app.use(express.static(path.join(__dirname , "public"))) //one common mistake is
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 app.use(cookieParser())
+app.use(verifyToken())
 app.use(cors())
 app.use(compress())
+app.use("/svg" , verifyToken ,svgRouter)
 
 const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mongo.connect(url,{
