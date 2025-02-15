@@ -82,6 +82,7 @@ app.post("/login" ,upload.none(), async(req , res)=>{
     try{
         const data = {...req.body , ...req.query}
         const {username , password} = data
+        console.log("Data : " , data)
 
         const exists = await user.findOne({username}).lean()
 
@@ -90,16 +91,16 @@ app.post("/login" ,upload.none(), async(req , res)=>{
         }
 
         const match = await bcrypt.compare(password , exists.password)
-        console.log("I was here.")
+        
         if(!match){
             return res.status(400).json({message:"Invalid Credentials"})
         }
 
         //generate the jwt token
-        console.log("I was here.1")
+       
         const token = jwt.sign({userId:exists._id}, JWT_SECRET , {expiresIn :"24h"})
-        console.log("I was here.2")
-        return res.json({message:"Login Successful"} , token)
+        
+        return res.status(201).json(message,"Login Successful")
     }
     catch(error){
         return res.status(500).json({message:`We couldn't verify its you , try again :${ error.message}`})
