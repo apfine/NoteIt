@@ -12,12 +12,12 @@ const cookieParser = require("cookie-parser")
 const mongo = require("mongoose")
 const user = require("./models/database")
 const { error } = require("console")
-const {mongo_user , mongo_pass}  = require("./backend/js/confidential.js")
+const {mongo_user , mongo_pass , jwtsecret}  = require("./backend/js/confidential.js")
 const multer = require("multer")
 const compress = require("compression")
 const port = 3000
 
-JWT_SECRET = "awijrfaer09q9t4j"
+JWT_SECRET = jwtsecret
 
 const app = express()
 const upload =multer()
@@ -100,7 +100,7 @@ app.post("/login" ,upload.none(), async(req , res)=>{
        
         const token = jwt.sign({userId:exists._id}, JWT_SECRET , {expiresIn :"24h"})
         
-        return res.status(201).json(message,"Login Successful")
+        return res.status(200).json({message:"Login Successful"})
     }
     catch(error){
         return res.status(500).json({message:`We couldn't verify its you , try again :${ error.message}`})
