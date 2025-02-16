@@ -10,7 +10,8 @@ require("dotenv").config()
 const jwt = require("jsonwebtoken")
 const cookieParser = require("cookie-parser")
 const mongo = require("mongoose")
-const user = require("./models/database")
+const user  = require("./models/database")
+const SVG = require("./models/database.js")
 const { error } = require("console")
 const {mongo_user , mongo_pass , jwtsecret}  = require("./backend/js/confidential.js")
 const multer = require("multer")
@@ -140,7 +141,7 @@ const verifyToken = (req , res , next) =>{
 
         const verified = jwt.verify(token.replace("Bearer ",""),JWT_SECRET)
         req.user = verified
-        console.log("$$$" , req.user)
+       // console.log("$$$" , req.user)
         next()
     }
     catch(error){
@@ -151,11 +152,12 @@ app.use(verifyToken)
 //svg methods
 app.post("/upload-svg" ,upload.none(), async (req , res)=>{
     try{
-        const {svgData} = {...req.body , ...req.query};
-        console.log("The data is : ", svgData)
-        const userId = await req.user.userId
-        const exists = await user.findOne({userId}).lean()
-        const newSVG = new SVG({userId , svgData})
+        const {svgD} = {...req.body , ...req.query};
+        console.log("The data is : ", svgD)
+        const userId = req.user.userId
+        const exists = await user.findOne({_id}).lean()
+        console.log("The user is : " , exists)
+        const newSVG = new SVG({userId:exists._id, svgData:svgD})
         console.log("I reached here")
         await newSVG.save()
         return res.status(200).json({message:"success"})
