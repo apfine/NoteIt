@@ -15,12 +15,14 @@ const { error } = require("console")
 const {mongo_user , mongo_pass , jwtsecret}  = require("./backend/js/confidential.js")
 const multer = require("multer")
 const compress = require("compression")
+const { verify } = require("crypto")
 const port = 3000
 
 JWT_SECRET = jwtsecret
 
 const app = express()
 const upload =multer()
+
 
 //Middlewares
 app.use(express.static(path.join(__dirname , "public"))) //one common mistake is not using index.html and the system do not detects.
@@ -29,6 +31,9 @@ app.use(express.urlencoded({extended : true}))
 app.use(cookieParser())
 app.use(cors())
 app.use(compress())
+
+
+
 
 //Connections to mongo
 const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
@@ -123,9 +128,31 @@ app.get("/get-cookie" , (req , res)=>{                          //Have to create
 })
 
 
-//svg methods
-app.post("/svg/:id" , (req , res)=>{
+//token verification methods
+const verifyToken = (req , res , next) =>{
+
     
+    const token = req.headers["authorization"]
+
+    if(!token) return res.status(401).json({message:"Access denied. Please login again."})
+
+    try{
+        const secretKey = process.env.JWT_SECRET; // Ensure you have `dotenv` configured
+
+        const verified = jwt.verify(token.replace("Bearer ",""),secretKey)
+        req.user = verified
+        next()
+    }
+    catch(error){
+        return res.status(400).json({message:`Invalid token , Error : ${error}`})
+}}
+
+app.use(verifyToken)
+//svg methods
+app.post("/svg/upload" , (req , res)=>{
+    const data = {...req.body , ...req.query};
+    console.log("The data is : ", data)
+
 })
 app.listen(port , ()=>{
     console.log(`The server is listening , PORT: ${port}`)
