@@ -148,7 +148,7 @@ const verifyToken = (req , res , next) =>{
 
 app.use(verifyToken)
 //svg methods
-app.post("/upload-svg" , (req , res)=>{
+app.post("/upload-svg" ,upload.none(), (req , res)=>{
     try{
         const {svgData} = {...req.body , ...req.query};
         console.log("The data is : ", svgData)
@@ -158,6 +158,8 @@ app.post("/upload-svg" , (req , res)=>{
         return res.status(500).json({message:error})
     }
 })
+
+
 app.listen(port , ()=>{
     console.log(`The server is listening , PORT: ${port}`)
 })
