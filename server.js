@@ -138,7 +138,7 @@ const verifyToken = (req , res , next) =>{
     try{
         const secretKey = process.env.JWT_SECRET; // Ensure you have `dotenv` configured
 
-        const verified = jwt.verify(token.replace("Bearer ",""),secretKey)
+        const verified = jwt.verify(token.replace("Bearer ",""),JWT_SECRET)
         req.user = verified
         next()
     }
@@ -148,10 +148,15 @@ const verifyToken = (req , res , next) =>{
 
 app.use(verifyToken)
 //svg methods
-app.post("/svg/upload" , (req , res)=>{
-    const data = {...req.body , ...req.query};
-    console.log("The data is : ", data)
-
+app.post("/upload-svg" , (req , res)=>{
+    try{
+        const {svgData} = {...req.body , ...req.query};
+        console.log("The data is : ", svgData)
+        return res.status(200).json({message:"success"})
+    }
+    catch(error){
+        return res.status(500).json({message:error})
+    }
 })
 app.listen(port , ()=>{
     console.log(`The server is listening , PORT: ${port}`)
