@@ -157,7 +157,7 @@ app.post("/upload-svg" ,upload.none(), async (req , res)=>{
         const userId = req.user.userId
         const exists = await user.findOne({_id:userId}).lean()
         console.log("The user is : " , exists)
-        const newSVG = new SVG({userId:exists._id, svgData:svgD})
+        const newSVG = new SVG({ userId:exists._id, svgData:svgD})
         console.log("The model being used : " , newSVG.constructor.modelName)
         console.log("I reached here")
         await newSVG.save()
