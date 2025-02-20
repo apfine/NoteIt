@@ -17,6 +17,7 @@ const {mongo_user , mongo_pass , jwtsecret}  = require("./backend/js/confidentia
 const multer = require("multer")
 const compress = require("compression")
 const { verify } = require("crypto")
+const verifyToken = require("./backend/js/tokenVerify.js")
 const port = 3000
 
 
@@ -74,7 +75,7 @@ app.post("/register" ,upload.none(), async(req , res)=>{
     }
 })
 
-
+//This is currently a dormant method will be further developed
 app.get("/set-cookie" , (req , res)=>{
     if(req.cookies.mode==1){
         res.cookie("mode" , 0 , {
@@ -122,7 +123,7 @@ app.post("/login" ,upload.none(), async(req , res)=>{
     }
 })
 
-
+//This is a dormant method which will be further developed.
 app.get("/get-cookie" , (req , res)=>{                          //Have to create this method because we resetricted cookie access
     const cookie = req.cookies.mode
     if(!cookie)return null
@@ -130,26 +131,7 @@ app.get("/get-cookie" , (req , res)=>{                          //Have to create
 })
 
 
-//token verification methods
-const verifyToken = (req , res , next) =>{
-
-    
-    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
-    if(!token) return res.status(401).json({message:"Access denied. Please login again."})
-
-    try{
-        const secretKey = process.env.JWT_SECRET; // Ensure you have `dotenv` configured
-
-        const verified = jwt.verify(token.replace("Bearer ",""),JWT_SECRET)
-        req.user = verified
-       // console.log("$$$" , req.user)
-        next()
-    }
-    catch(error){
-        return res.status(400).json({message:`Invalid token , Error : ${error}`})
-}}
-
-app.use(verifyToken)
+app.use(verifyToken)  //confidential custom token verification system.
 //svg methods
 app.post("/upload-svg" ,upload.none(), async (req , res)=>{
     try{
