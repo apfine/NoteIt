@@ -2,20 +2,19 @@ require("dotenv").config()
 const cors = require("cors")
 const bcrypt = require("bcryptjs")
 const express = require("express")
-const users = require("./backend/data/MOCK_DATA.json")
 const fs = require("fs")
 const path = require("path")
 const session = require("express-session")
 require("dotenv").config()
-const jwt = require("jsonwebtoken")
-const cookieParser = require("cookie-parser")
+const jwt = require("jsonwebtoken")                 //along with bcrypt forms an intangible system 
+const cookieParser = require("cookie-parser")       //enables safe parsing methods for cookies
 const mongo = require("mongoose")
-const {user , SVG}  = require("./models/database")
+const {user , SVG}  = require("./models/database")  //Database schema being imported.
 //const SVG = require("./models/database.js")
 const { error } = require("console")
 const {mongo_user , mongo_pass , jwtsecret}  = require("./backend/js/confidential.js")
 const multer = require("multer")
-const compress = require("compression")
+const compress = require("compression")            //helps reducing latency in indexing operations especially.
 const { verify } = require("crypto")
 const verifyToken = require("./backend/js/tokenVerify.js")
 const port = 3000
