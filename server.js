@@ -20,10 +20,10 @@ const { verify } = require("crypto")
 const port = 3000
 
 
-JWT_SECRET = jwtsecret
+JWT_SECRET = jwtsecret  //key is being outsourced 
 
 const app = express()
-const upload =multer()
+const upload =multer()  //multer is used to collect form data through post method
 
 
 //Middlewares
@@ -37,7 +37,7 @@ app.use(compress())
 
 
 
-//Connections to mongo
+//Connections to mongoDB server
 const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mongo.connect(url,{
     tls:true
