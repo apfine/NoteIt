@@ -17,6 +17,7 @@ const multer = require("multer")
 const compress = require("compression")            //helps reducing latency in indexing operations especially.
 const { verify } = require("crypto")
 const verifyToken = require("./backend/js/tokenVerify.js")
+const svgm = require("./routers/svgRouter.js")
 const port = 3000
 
 
@@ -36,7 +37,7 @@ app.use(compress())
 
 
 
-
+app.use("/svg" , svgm)
 //Connections to mongoDB server
 const url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.uqm9x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 mongo.connect(url,{
@@ -132,24 +133,24 @@ app.get("/get-cookie" , (req , res)=>{                          //Have to create
 
 app.use(verifyToken)  //confidential custom token verification system.
 //svg methods
-app.post("/upload-svg" ,upload.none(), async (req , res)=>{
-    try{
-        const {svgD} = {...req.body , ...req.query};
-        console.log("The data is : ", svgD)
-        const userId = req.user.userId
-        const exists = await user.findOne({_id:userId}).lean()
-        console.log("The user is : " , exists)
-        const newSVG = new SVG({ userId:exists._id, svgData:svgD})
-        console.log("The model being used : " , newSVG.constructor.modelName)
-        console.log("I reached here")
-        await newSVG.save()
-        return res.status(200).json({message:"success"})
-    }
-    catch(error){
-        console.log("The message : " , error)
-        return res.status(500).json({message:error})
-    }
-})
+// app.post("/upload-svg" ,upload.none(), async (req , res)=>{
+//     try{
+//         const {svgD} = {...req.body , ...req.query};
+//         console.log("The data is : ", svgD)
+//         const userId = req.user.userId
+//         const exists = await user.findOne({_id:userId}).lean()
+//         console.log("The user is : " , exists)
+//         const newSVG = new SVG({ userId:exists._id, svgData:svgD})
+//         console.log("The model being used : " , newSVG.constructor.modelName)
+//         console.log("I reached here")
+//         await newSVG.save()
+//         return res.status(200).json({message:"success"})
+//     }
+//     catch(error){
+//         console.log("The message : " , error)
+//         return res.status(500).json({message:error})
+//     }
+// })
 
 
 app.listen(port , ()=>{
