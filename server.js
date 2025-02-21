@@ -34,7 +34,7 @@ app.use(express.urlencoded({extended : true}))
 app.use(cookieParser())
 app.use(cors())
 app.use(compress())
-
+app.use(verifyToken)
 
 
 app.use("/svg" , svgm)
@@ -131,26 +131,7 @@ app.get("/get-cookie" , (req , res)=>{                          //Have to create
 })
 
 
-app.use(verifyToken)  //confidential custom token verification system.
-//svg methods
-// app.post("/upload-svg" ,upload.none(), async (req , res)=>{
-//     try{
-//         const {svgD} = {...req.body , ...req.query};
-//         console.log("The data is : ", svgD)
-//         const userId = req.user.userId
-//         const exists = await user.findOne({_id:userId}).lean()
-//         console.log("The user is : " , exists)
-//         const newSVG = new SVG({ userId:exists._id, svgData:svgD})
-//         console.log("The model being used : " , newSVG.constructor.modelName)
-//         console.log("I reached here")
-//         await newSVG.save()
-//         return res.status(200).json({message:"success"})
-//     }
-//     catch(error){
-//         console.log("The message : " , error)
-//         return res.status(500).json({message:error})
-//     }
-// })
+  
 
 
 app.listen(port , ()=>{
