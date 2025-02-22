@@ -37,6 +37,6 @@ svgRouter.post("/get-svg" , upload.none() , async(req , res)=>{
     const {svgId, userId} = {...req.body , ...req.query}
 
   }
-  catch(error){}
+  catch(error){return res.json({message:error})}
 })
 module.exports = svgRouter
